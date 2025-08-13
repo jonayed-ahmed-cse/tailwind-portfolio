@@ -1,4 +1,5 @@
-![Image 1](assets/images/tailwindPortfolio.webp)
+![Image 1](assets/images/Jonayed ahmed.png)
+
 
 
 
