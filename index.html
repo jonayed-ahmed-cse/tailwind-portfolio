@@ -14,6 +14,9 @@
     <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <link rel="stylesheet" href="./effects/cursor.css">
+
     <style>
     .header {
       transform: translateY(-100%);
@@ -135,7 +138,8 @@
   </head>
 
   <body class="bg-[#111] text-white font-['Nunito']">
-    <section class=" flex flex-col justify-between h-screen">
+ 
+       <section class=" flex flex-col justify-between h-screen">
       <img data-aos="flip-down" data-aos-duration="1000" class="image-gradient"
         src="assets/images/gradient.png" alt>
       <div class="layer-blur "></div>
@@ -1096,7 +1100,11 @@
     }
 
   </script>
+  <canvas id="canvas" class="cursor-canvas"></canvas>
+  <script src="./effects/cursor.js"></script>
 
+
+   
   </body>
 
 </html>

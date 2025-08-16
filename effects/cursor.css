@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  cursor: none; /* Hide native cursor */
+}
+.cursor-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+}
