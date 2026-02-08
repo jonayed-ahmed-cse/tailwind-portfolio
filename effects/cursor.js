@@ -1,6 +1,6 @@
 (() => {
   const canvas = document.getElementById('canvas');
-  const ctx = canvas.getContext('2d');
+  let ctx = canvas.getContext('2d');
 
   const E = {
     friction: 0.5,
@@ -14,7 +14,12 @@
   let lines = [];
 
   class Node {
-    constructor() { this.x = pos.x; this.y = pos.y; this.vx = 0; this.vy = 0; }
+    constructor() {
+      this.x = pos.x;
+      this.y = pos.y;
+      this.vx = 0;
+      this.vy = 0;
+    }
   }
 
   class Line {
@@ -92,32 +97,62 @@
     canvas.height = window.innerHeight;
   }
 
-  function render() {
-    if (!ctx) return;
-    ctx.globalCompositeOperation = 'source-over';
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.globalCompositeOperation = 'lighter';
+  function onMove(e) {
+    pos.x = e.clientX || (e.touches && e.touches[0]?.pageX) || pos.x;
+    pos.y = e.clientY || (e.touches && e.touches[0]?.pageY) || pos.y;
+  }
 
-    const hue = f.update();
-    lines.forEach(line => {
-      line.update();
-      line.draw(hue);
+  // Main render loop with error handling and cursor toggle
+  function render() {
+    try {
+      if (!ctx) throw new Error("Canvas context lost");
+
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.globalCompositeOperation = 'lighter';
+
+      const hue = f.update();
+      lines.forEach(line => {
+        line.update();
+        line.draw(hue);
+      });
+
+      // Animation running => hide native cursor
+      if (document.body.classList.contains('show-cursor')) {
+        document.body.classList.remove('show-cursor');
+      }
+
+      requestAnimationFrame(render);
+    } catch (err) {
+      console.error('Canvas rendering failed:', err);
+
+      // Show native cursor on failure
+      if (!document.body.classList.contains('show-cursor')) {
+        document.body.classList.add('show-cursor');
+      }
+
+      // Try to recover after short delay
+      setTimeout(() => {
+        ctx = canvas.getContext('2d');
+        initLines();
+        resizeCanvas();
+        render();
+      }, 1000); // 1 second delay before retrying
+    }
+  }
+
+  function start() {
+    window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('touchmove', onMove, { passive: true });
+    window.addEventListener('resize', () => {
+      resizeCanvas();
+      initLines();
     });
 
-    requestAnimationFrame(render);
+    resizeCanvas();
+    initLines();
+    render();
   }
 
-  function onMove(e) {
-    pos.x = e.clientX || (e.touches && e.touches[0].pageX);
-    pos.y = e.clientY || (e.touches && e.touches[0].pageY);
-  }
-
-  window.addEventListener('mousemove', onMove);
-  window.addEventListener('touchmove', onMove);
-  window.addEventListener('resize', () => { resizeCanvas(); initLines(); });
-
-  // initialize
-  resizeCanvas();
-  initLines();
-  render();
+  document.addEventListener('DOMContentLoaded', start);
 })();

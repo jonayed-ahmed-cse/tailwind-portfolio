@@ -35,6 +35,13 @@ right: -8px;
 animation: cursor .8s infinite, typing 20s steps(14) infinite;
 }
 
+@media (max-width: 639px) {
+    .animated-text {
+        font-size: 28px;  /* Adjust this value as needed */
+        min-width: 200px; /* Also reduce min-width if needed */
+    }
+}
+
 @keyframes cursor {
 to{
     border-left: 2px solid #ff7f5000;
@@ -43,13 +50,13 @@ to{
 
 @keyframes words {
 0%,20%{
-    content: "Youtuber";
+    content: "Blogger";
 }
 21%,40%{
-    content: "Developer";
+    content: "Flutter Developer";
 }
 41%,60%{
-    content: "Blogger";
+    content: "Android Developer";
 }
 61%,80%{
     content: "Designer";
